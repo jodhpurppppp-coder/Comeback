@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Comeback : Daily Routine</string>
+    <string name="sign_in_with_google">Sign in with Google</string>
+    <string name="welcome_headline">Comeback : Daily Routine</string>
+    <string name="welcome_subtitle">Whole-device background app blocker, daily study routine alerts, and deep focus timer for Boards (Classes 9–12), NEET UG, and JEE.</string>
+    <string name="select_exam_title">Which exam are you preparing for?</string>
+    <string name="boards_title">Boards Exam</string>
+    <string name="boards_subtitle">Class 9 • Class 10 • Class 11 • Class 12</string>
+    <string name="competitive_title">Competitive Exam</string>
+    <string name="competitive_subtitle">NEET UG • JEE Main &amp; Advanced</string>
+    <string name="tab_dashboard">Dashboard</string>
+    <string name="tab_focus_shield">Focus &amp; Shield</string>
+    <string name="tab_analytics">Analytics</string>
+    <string name="tab_rewards">Rewards</string>
+</resources>

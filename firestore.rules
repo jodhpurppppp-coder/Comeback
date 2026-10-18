@@ -1,0 +1,216 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    // Global Safety Net: Default-deny catch-all
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    function isValidId(id) {
+      return id is string && id.size() >= 1 && id.size() <= 128 && id.matches('^[a-zA-Z0-9_\\-]+$');
+    }
+
+    function incoming() {
+      return request.resource.data;
+    }
+
+    function existing() {
+      return resource.data;
+    }
+
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    function isValidUserProfile(data) {
+      return data.keys().hasAll([
+               'userId', 'displayName', 'examCategory', 'examTarget',
+               'dailyGoalMinutes', 'xpPoints', 'regainCoins',
+               'currentStreak', 'longestStreak', 'totalStudyMinutes',
+               'completedSessionsCount', 'perfectDaysCount',
+               'strictBlockEnabled', 'dailyNotificationEnabled',
+               'lastActiveDate', 'unlockedBadges', 'blockedPackages',
+               'createdAt', 'updatedAt'
+             ]) &&
+             data.keys().hasOnly([
+               'userId', 'displayName', 'examCategory', 'examTarget',
+               'dailyGoalMinutes', 'xpPoints', 'regainCoins',
+               'currentStreak', 'longestStreak', 'totalStudyMinutes',
+               'completedSessionsCount', 'perfectDaysCount',
+               'strictBlockEnabled', 'dailyNotificationEnabled',
+               'lastActiveDate', 'unlockedBadges', 'blockedPackages',
+               'createdAt', 'updatedAt'
+             ]) &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.userId == request.auth.uid &&
+             data.displayName is string && data.displayName.size() >= 1 && data.displayName.size() <= 100 &&
+             data.examCategory is string && data.examCategory.size() <= 30 &&
+             data.examCategory in ['UNSET', 'BOARDS', 'COMPETITIVE'] &&
+             data.examTarget is string && data.examTarget.size() <= 40 &&
+             data.examTarget in ['Not Selected', 'Class 9', 'Class 10', 'Class 11', 'Class 12', 'NEET UG', 'JEE'] &&
+             data.dailyGoalMinutes is int && data.dailyGoalMinutes >= 30 && data.dailyGoalMinutes <= 960 &&
+             data.xpPoints is int && data.xpPoints >= 0 && data.xpPoints <= 10000000 &&
+             data.regainCoins is int && data.regainCoins >= 0 && data.regainCoins <= 10000000 &&
+             data.currentStreak is int && data.currentStreak >= 0 && data.currentStreak <= 10000 &&
+             data.longestStreak is int && data.longestStreak >= 0 && data.longestStreak <= 10000 &&
+             data.totalStudyMinutes is int && data.totalStudyMinutes >= 0 && data.totalStudyMinutes <= 10000000 &&
+             data.completedSessionsCount is int && data.completedSessionsCount >= 0 && data.completedSessionsCount <= 1000000 &&
+             data.perfectDaysCount is int && data.perfectDaysCount >= 0 && data.perfectDaysCount <= 100000 &&
+             data.strictBlockEnabled is bool &&
+             data.dailyNotificationEnabled is bool &&
+             data.lastActiveDate is string && data.lastActiveDate.size() <= 20 &&
+             data.unlockedBadges is list && data.unlockedBadges.size() <= 30 &&
+             (data.unlockedBadges.size() == 0 || (data.unlockedBadges[0] is string && data.unlockedBadges[0].size() <= 60)) &&
+             data.blockedPackages is list && data.blockedPackages.size() <= 50 &&
+             (data.blockedPackages.size() == 0 || (data.blockedPackages[0] is string && data.blockedPackages[0].size() <= 120)) &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidRoutineTask(data) {
+      return data.keys().hasAll([
+               'userId', 'title', 'subject', 'period', 'blockType',
+               'startTime', 'durationMinutes', 'completedMinutesToday',
+               'isCompletedToday', 'examTag', 'presetName',
+               'notifyOnStart', 'priorityOrder', 'createdAt', 'updatedAt'
+             ]) &&
+             data.keys().hasOnly([
+               'userId', 'title', 'subject', 'period', 'blockType',
+               'startTime', 'durationMinutes', 'completedMinutesToday',
+               'isCompletedToday', 'examTag', 'presetName',
+               'notifyOnStart', 'priorityOrder', 'createdAt', 'updatedAt'
+             ]) &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.userId == request.auth.uid &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 120 &&
+             data.subject is string && data.subject.size() >= 1 && data.subject.size() <= 60 &&
+             data.period is string && data.period.size() <= 20 &&
+             data.period in ['MORNING', 'AFTERNOON', 'EVENING', 'CUSTOM'] &&
+             data.blockType is string && data.blockType.size() <= 20 &&
+             data.blockType in ['STUDY', 'BREAK', 'DAILY_ROUTINE'] &&
+             data.startTime is string && data.startTime.size() >= 1 && data.startTime.size() <= 10 &&
+             data.durationMinutes is int && data.durationMinutes >= 5 && data.durationMinutes <= 360 &&
+             data.completedMinutesToday is int && data.completedMinutesToday >= 0 && data.completedMinutesToday <= 360 &&
+             data.isCompletedToday is bool &&
+             data.examTag is string && data.examTag.size() >= 1 && data.examTag.size() <= 40 &&
+             data.presetName is string && data.presetName.size() >= 1 && data.presetName.size() <= 80 &&
+             data.notifyOnStart is bool &&
+             data.priorityOrder is int && data.priorityOrder >= 0 && data.priorityOrder <= 1000 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    function isValidFocusSession(data) {
+      return data.keys().hasAll([
+               'userId', 'routineId', 'title', 'subject', 'period',
+               'plannedMinutes', 'actualMinutes', 'xpEarned',
+               'focusScore', 'blockedAttempts', 'dateKey',
+               'hourOfDay', 'examTarget', 'createdAt', 'updatedAt'
+             ]) &&
+             data.keys().hasOnly([
+               'userId', 'routineId', 'title', 'subject', 'period',
+               'plannedMinutes', 'actualMinutes', 'xpEarned',
+               'focusScore', 'blockedAttempts', 'dateKey',
+               'hourOfDay', 'examTarget', 'createdAt', 'updatedAt'
+             ]) &&
+             data.userId is string && data.userId.size() >= 1 && data.userId.size() <= 128 &&
+             data.userId == request.auth.uid &&
+             data.routineId is string && data.routineId.size() <= 128 &&
+             data.title is string && data.title.size() >= 1 && data.title.size() <= 120 &&
+             data.subject is string && data.subject.size() >= 1 && data.subject.size() <= 60 &&
+             data.period is string && data.period.size() <= 20 &&
+             data.period in ['MORNING', 'AFTERNOON', 'EVENING', 'CUSTOM'] &&
+             data.plannedMinutes is int && data.plannedMinutes >= 1 && data.plannedMinutes <= 360 &&
+             data.actualMinutes is int && data.actualMinutes >= 1 && data.actualMinutes <= 360 &&
+             data.xpEarned is int && data.xpEarned >= 0 && data.xpEarned <= 5000 &&
+             data.focusScore is int && data.focusScore >= 0 && data.focusScore <= 100 &&
+             data.blockedAttempts is int && data.blockedAttempts >= 0 && data.blockedAttempts <= 1000 &&
+             data.dateKey is string && data.dateKey.size() >= 1 && data.dateKey.size() <= 20 &&
+             data.hourOfDay is int && data.hourOfDay >= 0 && data.hourOfDay <= 23 &&
+             data.examTarget is string && data.examTarget.size() >= 1 && data.examTarget.size() <= 40 &&
+             data.createdAt is timestamp && data.createdAt <= request.time &&
+             data.updatedAt is timestamp && data.updatedAt <= request.time;
+    }
+
+    match /users/{userId} {
+      allow get: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+      allow list: if isSignedIn() && request.auth.uid == userId && existing().userId == request.auth.uid;
+
+      allow create: if isSignedIn() &&
+                       isValidId(userId) &&
+                       request.auth.uid == userId &&
+                       isValidUserProfile(incoming());
+
+      allow update: if isSignedIn() &&
+                       isValidId(userId) &&
+                       request.auth.uid == userId &&
+                       isValidUserProfile(incoming()) &&
+                       incoming().userId == existing().userId &&
+                       incoming().createdAt == existing().createdAt &&
+                       incoming().diff(existing()).affectedKeys().hasOnly([
+                         'displayName', 'examCategory', 'examTarget',
+                         'dailyGoalMinutes', 'xpPoints', 'regainCoins',
+                         'currentStreak', 'longestStreak', 'totalStudyMinutes',
+                         'completedSessionsCount', 'perfectDaysCount',
+                         'strictBlockEnabled', 'dailyNotificationEnabled',
+                         'lastActiveDate', 'unlockedBadges', 'blockedPackages',
+                         'updatedAt'
+                       ]);
+
+      allow delete: if isSignedIn() && isValidId(userId) && request.auth.uid == userId;
+
+      match /routines/{routineId} {
+        allow get: if isSignedIn() && isValidId(userId) && isValidId(routineId) && request.auth.uid == userId && existing().userId == request.auth.uid;
+        allow list: if isSignedIn() && request.auth.uid == userId && existing().userId == request.auth.uid;
+
+        allow create: if isSignedIn() &&
+                         isValidId(userId) &&
+                         isValidId(routineId) &&
+                         request.auth.uid == userId &&
+                         isValidRoutineTask(incoming());
+
+        allow update: if isSignedIn() &&
+                         isValidId(userId) &&
+                         isValidId(routineId) &&
+                         request.auth.uid == userId &&
+                         isValidRoutineTask(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'title', 'subject', 'period', 'blockType',
+                           'startTime', 'durationMinutes', 'completedMinutesToday',
+                           'isCompletedToday', 'examTag', 'presetName',
+                           'notifyOnStart', 'priorityOrder', 'updatedAt'
+                         ]);
+
+        allow delete: if isSignedIn() && isValidId(userId) && isValidId(routineId) && request.auth.uid == userId && existing().userId == request.auth.uid;
+      }
+
+      match /sessions/{sessionId} {
+        allow get: if isSignedIn() && isValidId(userId) && isValidId(sessionId) && request.auth.uid == userId && existing().userId == request.auth.uid;
+        allow list: if isSignedIn() && request.auth.uid == userId && existing().userId == request.auth.uid;
+
+        allow create: if isSignedIn() &&
+                         isValidId(userId) &&
+                         isValidId(sessionId) &&
+                         request.auth.uid == userId &&
+                         isValidFocusSession(incoming());
+
+        allow update: if isSignedIn() &&
+                         isValidId(userId) &&
+                         isValidId(sessionId) &&
+                         request.auth.uid == userId &&
+                         isValidFocusSession(incoming()) &&
+                         incoming().userId == existing().userId &&
+                         incoming().createdAt == existing().createdAt &&
+                         incoming().diff(existing()).affectedKeys().hasOnly([
+                           'actualMinutes', 'xpEarned', 'focusScore',
+                           'blockedAttempts', 'updatedAt'
+                         ]);
+
+        allow delete: if isSignedIn() && isValidId(userId) && isValidId(sessionId) && request.auth.uid == userId && existing().userId == request.auth.uid;
+      }
+    }
+  }
+}

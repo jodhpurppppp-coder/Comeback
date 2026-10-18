@@ -1,0 +1,307 @@
+{
+  "entities": {
+    "UserProfile": {
+      "title": "UserProfile",
+      "description": "Stores user profile, selected exam track (Boards Class 9-12 or Competitive NEET UG / JEE), app blocker settings, and gamification stats (XP, coins, streaks, badges).",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Authenticated user UID matching request.auth.uid."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "Display name of the student."
+        },
+        "examCategory": {
+          "type": "string",
+          "enum": ["UNSET", "BOARDS", "COMPETITIVE"],
+          "description": "Primary exam category selected after login."
+        },
+        "examTarget": {
+          "type": "string",
+          "enum": ["Not Selected", "Class 9", "Class 10", "Class 11", "Class 12", "NEET UG", "JEE"],
+          "description": "Specific exam or class target."
+        },
+        "dailyGoalMinutes": {
+          "type": "integer",
+          "description": "Daily target focus minutes."
+        },
+        "xpPoints": {
+          "type": "integer",
+          "description": "Total gamification XP points earned."
+        },
+        "regainCoins": {
+          "type": "integer",
+          "description": "Total Regain focus coins earned."
+        },
+        "currentStreak": {
+          "type": "integer",
+          "description": "Consecutive days of study adherence."
+        },
+        "longestStreak": {
+          "type": "integer",
+          "description": "Best consecutive days streak."
+        },
+        "totalStudyMinutes": {
+          "type": "integer",
+          "description": "Cumulative focused study minutes."
+        },
+        "completedSessionsCount": {
+          "type": "integer",
+          "description": "Total completed focus sessions."
+        },
+        "perfectDaysCount": {
+          "type": "integer",
+          "description": "Days where 100% of planned study goal was reached."
+        },
+        "strictBlockEnabled": {
+          "type": "boolean",
+          "description": "Whether strict background app blocking is active during focus timer."
+        },
+        "dailyNotificationEnabled": {
+          "type": "boolean",
+          "description": "Whether daily routine reminders and notifications are enabled."
+        },
+        "lastActiveDate": {
+          "type": "string",
+          "description": "Last active study date in YYYY-MM-DD format."
+        },
+        "unlockedBadges": {
+          "type": "array",
+          "description": "List of unlocked milestone badge IDs."
+        },
+        "blockedPackages": {
+          "type": "array",
+          "description": "List of package names blocked during focus sessions."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was created (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server timestamp when the profile was last updated (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "displayName",
+        "examCategory",
+        "examTarget",
+        "dailyGoalMinutes",
+        "xpPoints",
+        "regainCoins",
+        "currentStreak",
+        "longestStreak",
+        "totalStudyMinutes",
+        "completedSessionsCount",
+        "perfectDaysCount",
+        "strictBlockEnabled",
+        "dailyNotificationEnabled",
+        "lastActiveDate",
+        "unlockedBadges",
+        "blockedPackages",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "RoutineTask": {
+      "title": "RoutineTask",
+      "description": "Represents a scheduled study block, break, or daily routine task in Morning, Afternoon, Evening, or Custom slots.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID matching request.auth.uid."
+        },
+        "title": {
+          "type": "string",
+          "description": "Title of the study or daily routine task."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject or category name (e.g., Physics, Chemistry, Biology, Mathematics, Break)."
+        },
+        "period": {
+          "type": "string",
+          "enum": ["MORNING", "AFTERNOON", "EVENING", "CUSTOM"],
+          "description": "Time of day routine slot."
+        },
+        "blockType": {
+          "type": "string",
+          "enum": ["STUDY", "BREAK", "DAILY_ROUTINE"],
+          "description": "Type of schedule block."
+        },
+        "startTime": {
+          "type": "string",
+          "description": "Scheduled start time in HH:mm format."
+        },
+        "durationMinutes": {
+          "type": "integer",
+          "description": "Planned duration in minutes (5 to 360)."
+        },
+        "completedMinutesToday": {
+          "type": "integer",
+          "description": "Minutes completed toward this task today."
+        },
+        "isCompletedToday": {
+          "type": "boolean",
+          "description": "Whether the routine task is marked completed today."
+        },
+        "examTag": {
+          "type": "string",
+          "description": "Exam target tag associated with this task."
+        },
+        "presetName": {
+          "type": "string",
+          "description": "Preset routine label or Custom."
+        },
+        "notifyOnStart": {
+          "type": "boolean",
+          "description": "Whether to trigger a device notification at startTime."
+        },
+        "priorityOrder": {
+          "type": "integer",
+          "description": "Ordering index within the day."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "title",
+        "subject",
+        "period",
+        "blockType",
+        "startTime",
+        "durationMinutes",
+        "completedMinutesToday",
+        "isCompletedToday",
+        "examTag",
+        "presetName",
+        "notifyOnStart",
+        "priorityOrder",
+        "createdAt",
+        "updatedAt"
+      ]
+    },
+    "FocusSession": {
+      "title": "FocusSession",
+      "description": "Records a completed or partial focus study session for analytics, subject breakdowns, planned vs actual comparisons, and time-of-day insights.",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Owner user UID matching request.auth.uid."
+        },
+        "routineId": {
+          "type": "string",
+          "description": "Associated RoutineTask ID or quick_focus."
+        },
+        "title": {
+          "type": "string",
+          "description": "Session title."
+        },
+        "subject": {
+          "type": "string",
+          "description": "Studied subject."
+        },
+        "period": {
+          "type": "string",
+          "enum": ["MORNING", "AFTERNOON", "EVENING", "CUSTOM"],
+          "description": "Time of day period."
+        },
+        "plannedMinutes": {
+          "type": "integer",
+          "description": "Planned duration in minutes."
+        },
+        "actualMinutes": {
+          "type": "integer",
+          "description": "Actual focused duration in minutes."
+        },
+        "xpEarned": {
+          "type": "integer",
+          "description": "Gamification XP earned in this session."
+        },
+        "focusScore": {
+          "type": "integer",
+          "description": "Focus quality score from 0 to 100."
+        },
+        "blockedAttempts": {
+          "type": "integer",
+          "description": "Number of distracting app launches blocked during session."
+        },
+        "dateKey": {
+          "type": "string",
+          "description": "Date string in YYYY-MM-DD format."
+        },
+        "hourOfDay": {
+          "type": "integer",
+          "description": "Hour of day (0-23) when session was completed."
+        },
+        "examTarget": {
+          "type": "string",
+          "description": "Exam target active during session."
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server creation timestamp (FieldValue.serverTimestamp())."
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Server update timestamp (FieldValue.serverTimestamp())."
+        }
+      },
+      "required": [
+        "userId",
+        "routineId",
+        "title",
+        "subject",
+        "period",
+        "plannedMinutes",
+        "actualMinutes",
+        "xpEarned",
+        "focusScore",
+        "blockedAttempts",
+        "dateKey",
+        "hourOfDay",
+        "examTarget",
+        "createdAt",
+        "updatedAt"
+      ]
+    }
+  },
+  "firestore": {
+    "/users/{userId}": {
+      "schema": {
+        "$ref": "#/entities/UserProfile"
+      },
+      "description": "Per-user profile, exam target selection, app blocker configuration, and gamification stats."
+    },
+    "/users/{userId}/routines/{routineId}": {
+      "schema": {
+        "$ref": "#/entities/RoutineTask"
+      },
+      "description": "Per-user scheduled study blocks, breaks, and daily routine tasks."
+    },
+    "/users/{userId}/sessions/{sessionId}": {
+      "schema": {
+        "$ref": "#/entities/FocusSession"
+      },
+      "description": "Per-user completed focus study sessions for analytics and progress reporting."
+    }
+  }
+}

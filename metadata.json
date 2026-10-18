@@ -1,0 +1,8 @@
+{
+  "name": "Comeback : Daily Routine",
+  "description": "Comeback : Daily Routine — Whole-device Android focus shield, background app blocker, study & daily routine planner with multi-theme support for Boards (Classes 9-12) and Competitive Exams (NEET UG & JEE).",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
