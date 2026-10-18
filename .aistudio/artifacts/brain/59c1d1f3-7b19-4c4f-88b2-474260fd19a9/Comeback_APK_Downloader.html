@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Download Comeback : Daily Routine APK</title>
+  <style>
+    :root {
+      --bg: #070B19;
+      --card: #11182E;
+      --border: #1E294B;
+      --cyan: #00D2FF;
+      --purple: #7B2CBF;
+      --pink: #FF2A85;
+      --orange: #FF7B00;
+      --text: #F8FAFC;
+      --muted: #94A3B8;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
+    body {
+      background: radial-gradient(circle at top right, #162044 0%, var(--bg) 65%);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 24px;
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: 24px;
+      max-width: 520px;
+      width: 100%;
+      padding: 32px;
+      box-shadow: 0 24px 60px rgba(0, 0, 0, 0.55);
+      text-align: center;
+    }
+    .logo {
+      width: 76px;
+      height: 76px;
+      border-radius: 50%;
+      margin: 0 auto 18px;
+      background: conic-gradient(from 180deg, var(--cyan), var(--purple), var(--pink), var(--orange), var(--cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 0 28px rgba(0, 210, 255, 0.35);
+    }
+    .logo-inner {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      background: var(--card);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 22px;
+      color: var(--cyan);
+    }
+    .badge {
+      display: inline-block;
+      background: rgba(16, 185, 129, 0.16);
+      color: #34D399;
+      border: 1px solid rgba(52, 211, 153, 0.35);
+      border-radius: 999px;
+      padding: 5px 14px;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      margin-bottom: 12px;
+    }
+    h1 {
+      font-size: 24px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    p.sub {
+      color: var(--muted);
+      font-size: 14px;
+      line-height: 1.5;
+      margin-bottom: 24px;
+    }
+    .meta {
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 14px 18px;
+      margin-bottom: 24px;
+      text-align: left;
+      font-size: 13px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .meta div span {
+      display: block;
+      color: var(--muted);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    .meta div strong {
+      color: var(--text);
+      font-size: 13px;
+    }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      padding: 16px 24px;
+      border-radius: 14px;
+      border: none;
+      cursor: pointer;
+      font-size: 16px;
+      font-weight: 800;
+      color: #fff;
+      background: linear-gradient(135deg, var(--cyan), var(--purple), var(--pink));
+      box-shadow: 0 10px 25px rgba(123, 44, 191, 0.45);
+      transition: transform 0.15s ease, opacity 0.15s ease;
+      text-decoration: none;
+    }
+    .btn:hover { transform: translateY(-2px); opacity: 0.96; }
+    .btn:active { transform: translateY(0); }
+    .status {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #34D399;
+      min-height: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="logo"><div class="logo-inner">C</div></div>
+    <div class="badge">VERIFIED ANDROID DEBUG APK</div>
+    <h1>Comeback : Daily Routine</h1>
+    <p class="sub">Signed &amp; verified Android installation package (<code>app-debug.apk</code>) with Study Routine, Auto-Start Focus Timer, App Blocker Shield, and 5 Themes.</p>
+    <div class="meta">
+      <div><span>File Name</span><strong>app-debug.apk</strong></div>
+      <div><span>Package ID</span><strong>com.aistudio.regainfocus.vqzplk</strong></div>
+      <div><span>Min Android SDK</span><strong>Android 7.0+ (API 24)</strong></div>
+      <div><span>Signature</span><strong>Android Debug Keystore</strong></div>
+    </div>
+    <button id="downloadBtn" class="btn" onclick="downloadApk()">
+      <span>⬇ Download app-debug.apk Now</span>
+    </button>
+    <div id="statusText" class="status">Ready for 1-click download</div>
+  </div>
+  <script>
+    const APK_BASE64 = "__APK_BASE64_PAYLOAD__";
+    function downloadApk() {
+      const statusEl = document.getElementById("statusText");
+      try {
+        statusEl.textContent = "Preparing APK binary...";
+        const byteCharacters = atob(APK_BASE64);
+        const byteNumbers = new Array(byteCharacters.length);
+        for (let i = 0; i < byteCharacters.length; i++) {
+          byteNumbers[i] = byteCharacters.charCodeAt(i);
+        }
+        const byteArray = new Uint8Array(byteNumbers);
+        const blob = new Blob([byteArray], { type: "application/vnd.android.package-archive" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "app-debug.apk";
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(() => {
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+        }, 2000);
+        statusEl.textContent = "✓ Download started: app-debug.apk";
+      } catch (e) {
+        statusEl.textContent = "Error: " + e.message;
+      }
+    }
+  </script>
+</body>
+</html>
